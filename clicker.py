@@ -23,7 +23,7 @@ def click(type: int = 0):
         case 1:
             mouse.right_click()
         case _: #this is the default/fallback case
-            sys.exit('ERROR: undefined click type "' + type + '".') #complain
+            sys.exit('ERROR: undefined click type "' + str(type) + '".') #complain
 
 '''
 Mashes click() with the specified delay.
