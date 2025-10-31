@@ -8,34 +8,47 @@ root = tkinter.Tk() #base window
 root.title("clack")
 root.resizable(width=False, height=False)
 
+def cancel():
+    print("cancel")
 
-speed = tkinter.IntVar() #this will be the variable modified by the radios and passed to the clicker module.
-custom = tkinter.StringVar(value=1000) #value storage for custom speed input box. Must be string because of Entry widget.
+def confirm():
+    newSpeed = int(speed.get())
+    if (newSpeed == -1):
+        print("custom mode caught! setting newSpeed to " + str(custom.get()) + "!")
+        newSpeed = custom.get()
+        
+    print("confirming with speed " + str(newSpeed) + "!")
+
+speed = tkinter.IntVar(name="speed") #this will be the variable modified by the radios and passed to the clicker module.
+custom = tkinter.IntVar(name="custom") #value storage for custom speed input box.
 
 
-baseFrame = tkinter.Frame(root, bg = "black").grid() #base frame around everything
+baseFrame = tkinter.Frame(root).grid(row=0, column=0, columnspan=4, rowspan=5) #base frame around everything
 
 bannerImg = tkinter.PhotoImage(file='banner.png')
-titleCard = tkinter.Label(baseFrame, image=bannerImg, bg="black") #logo at the top of the window
+titleCard = tkinter.Label(baseFrame, image=bannerImg).grid(  #logo at the top of the window
+    column=0, row=0, columnspan=3, rowspan=3
+)
 
-controlBox = tkinter.Frame(baseFrame, bg="black") #frame around all the controls
+instructions = tkinter.Label(baseFrame, text="Select a speed, given"
+" in ms between clicks.").grid(column=0, row=3, columnspan=3, rowspan=1)
 
-instructions = tkinter.Label(controlBox, text="Select a speed, given in ms between clicks.", bg="black", fg="white")
 
-radioBox = tkinter.Frame(controlBox, bg="black") #frame around just the radio buttons for the speed controls
 
 #the four preset radiobuttons
-option0 = tkinter.Radiobutton(radioBox, variable=speed, value=presets[0], text=presets[0], bg="black", fg="grey", indicatoron=False)
-option1 = tkinter.Radiobutton(radioBox, variable=speed, value=presets[1], text=presets[1], bg="black", fg="grey", indicatoron=False)
-option2 = tkinter.Radiobutton(radioBox, variable=speed, value=presets[2], text=presets[2], bg="black", fg="grey", indicatoron=False)
-option3 = tkinter.Radiobutton(radioBox, variable=speed, value=presets[3], text=presets[3], bg="black", fg="grey", indicatoron=False)
+option0 = tkinter.Radiobutton(baseFrame, variable=speed, value=presets[0], text=presets[0], indicatoron=False).grid(column=4, row=0)
+option1 = tkinter.Radiobutton(baseFrame, variable=speed, value=presets[1], text=presets[1], indicatoron=False).grid(column=4, row=1)
+option2 = tkinter.Radiobutton(baseFrame, variable=speed, value=presets[2], text=presets[2], indicatoron=False).grid(column=4, row=2)
+option3 = tkinter.Radiobutton(baseFrame, variable=speed, value=presets[3], text=presets[3], indicatoron=False).grid(column=4, row=3)
 
-option4 = tkinter.Radiobutton(radioBox, variable=speed, value=custom, text="custom", bg="black", fg="grey", indicatoron=False) #radiobutton for custom selector
+numInput = tkinter.Spinbox(baseFrame, textvariable=custom, increment=10, from_=10, to=100000).grid(column=2, row=5)
 
-numInput = tkinter.Spinbox(radioBox, textvariable=custom, increment=10, from_=10, to=100000, bg="black", fg="white")
+option4 = tkinter.Radiobutton(baseFrame, variable=speed, value=-1, text="custom", indicatoron=False).grid(column=4, row=5) #radiobutton for custom selector
 
-controlPanel = [option0, option1, option2, option3, option4, numInput]
 
+
+acceptButton = tkinter.Button(text="confirm", command=confirm).grid(column=1, row=5)
+cancelButton = tkinter.Button(text="cancel", command=cancel).grid(column=0, row=5)
 # DELETE THIS AFTER FINISHING THE GUI
 def main():
     root.mainloop()
